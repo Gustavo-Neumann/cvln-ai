@@ -2,10 +2,16 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0
 
 WORKDIR /app
 
-COPY worker.csproj ./
+RUN chown ubuntu:ubuntu /app
+
+USER ubuntu
+
+COPY --chown=ubuntu:ubuntu worker.csproj ./
+
 RUN dotnet restore
 
-COPY . .
-RUN dotnet build --no-restore
+COPY --chown=ubuntu:ubuntu . .
 
-CMD ["dotnet", "run", "--no-restore", "--no-launch-profile"]
+RUN dotnet build
+
+CMD ["dotnet", "run", "--no-launch-profile"]
