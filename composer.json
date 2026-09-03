@@ -1,0 +1,8 @@
+{
+    "require-dev": {
+        "laravel/boost": "^2.7"
+    },
+    "require": {
+        "laravel/sanctum": "^4.3"
+    }
+}
