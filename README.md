@@ -45,13 +45,13 @@ Não é necessário instalar PHP, Composer ou .NET localmente para executar os s
 
 ## Como rodar
 
-Na raiz do projeto, crie o arquivo `.env` usado pelo Docker Compose:
+O arquivo de ambiente do projeto fica dentro de `core/`. Na raiz do projeto, copie o exemplo:
 
 ```bash
-cp core/.env.example .env
+cp core/.env.example core/.env
 ```
 
-Edite o `.env` e configure pelo menos estas variáveis:
+Edite `core/.env` e configure pelo menos estas variáveis:
 
 ```dotenv
 APP_NAME=CVLN-AI
@@ -61,31 +61,24 @@ APP_KEY=
 DB_CONNECTION=pgsql
 DB_HOST=pgvector
 DB_PORT=5432
-DB_DATABASE=cvln
-DB_USERNAME=cvln
-DB_PASSWORD=cvln
+DB_DATABASE=db_main
+DB_USERNAME=main
+DB_PASSWORD=password
 ```
 
-O restante da configuração do PostgreSQL também é lido desse mesmo `.env`. Depois, suba os containers:
+O Docker Compose também usa `core/.env` para o core, o worker e o PostgreSQL. Depois, suba os containers:
 
 ```bash
 docker compose up --build -d
 ```
 
-Gere a chave da aplicação dentro do container do core:
+Gere a chave da aplicação dentro do container do core. O valor será gravado em `core/.env`:
 
 ```bash
 docker compose exec core php artisan key:generate
 ```
 
-Caso o arquivo `.env` ainda não exista dentro de `core/`, copie a configuração antes de gerar a chave:
-
-```bash
-cp .env core/.env
-docker compose exec core php artisan key:generate
-```
-
-Após a geração, mantenha o valor de `APP_KEY` também no `.env` da raiz, pois ele é o arquivo passado aos containers pelo Compose. Por fim, execute as migrations:
+Por fim, execute as migrations:
 
 ```bash
 docker compose exec core php artisan migrate
@@ -102,7 +95,7 @@ A aplicação estará disponível em [http://localhost:8000](http://localhost:80
 | RabbitMQ AMQP | `localhost:5672` | Comunicação entre core e worker |
 | RabbitMQ Management | [http://localhost:15672](http://localhost:15672) | Administração das filas |
 
-As credenciais do RabbitMQ são definidas pelas variáveis `RABBITMQ_DEFAULT_USER` e `RABBITMQ_DEFAULT_PASS`, caso sejam configuradas no `.env`.
+As credenciais do RabbitMQ são definidas pelas variáveis `RABBITMQ_DEFAULT_USER` e `RABBITMQ_DEFAULT_PASS`, caso sejam configuradas no `core/.env`.
 
 ## Comandos úteis
 
