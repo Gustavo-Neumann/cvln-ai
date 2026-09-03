@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
     working_dir: /var/www
     env_file:
-      - .env
+      - ./core/.env
     volumes:
       - ./core:/var/www
     depends_on:
@@ -39,7 +39,7 @@ services:
     restart: unless-stopped
     working_dir: /app
     env_file:
-      - .env
+      - ./core/.env
     volumes:
       - ./worker:/app
     depends_on:
@@ -55,7 +55,7 @@ services:
     ports:
       - "5432:5432"
     env_file:
-      - .env
+      - ./core/.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
